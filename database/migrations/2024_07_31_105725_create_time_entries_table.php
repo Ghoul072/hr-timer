@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class);
             $table->dateTime('start_time');
-            $table->dateTime('end_time');
-            $table->string('start_location');
-            $table->string('end_location');
+            $table->dateTime('end_time')->nullable();
+            $table->string('start_location')->nullable();
+            $table->string('end_location')->nullable();
             $table->timestamps();
         });
     }
