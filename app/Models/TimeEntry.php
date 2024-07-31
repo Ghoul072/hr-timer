@@ -15,7 +15,8 @@ class TimeEntry extends Model
         'user_id',
         'start_time',
         'end_time',
-        'location',
+        'start_location',
+        'end_location',
     ];
 
     protected $casts = [

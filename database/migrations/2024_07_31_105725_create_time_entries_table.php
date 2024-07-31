@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->dateTime('start_time');
             $table->dateTime('end_time');
-            $table->string('location');
+            $table->string('start_location');
+            $table->string('end_location');
             $table->timestamps();
         });
     }
