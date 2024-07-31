@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignIdFor(TimeEntry::class);
             $table->dateTime('start_time');
             $table->dateTime('end_time')->nullable();
-            $table->string('start_location')->nullable();
-            $table->string('end_location')->nullable();
+            $table->json('start_location')->nullable();
+            $table->json('end_location')->nullable();
             $table->timestamps();
         });
     }

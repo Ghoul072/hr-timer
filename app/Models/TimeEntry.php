@@ -22,6 +22,8 @@ class TimeEntry extends Model
     protected $casts = [
         'start_time' => 'datetime',
         'end_time' => 'datetime',
+        'start_location' => 'array',
+        'end_location' => 'array',
     ];
 
     public function user()
