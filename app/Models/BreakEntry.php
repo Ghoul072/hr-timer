@@ -13,6 +13,7 @@ class BreakEntry extends Model
         'time_entry_id',
         'start_time',
         'end_time',
+        'location',
     ];
 
     protected $casts = [
