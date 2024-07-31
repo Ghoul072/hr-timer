@@ -26,3 +26,30 @@
         @endif
     </div>
 </div>
+
+<script>
+    const test = true;
+    document.addEventListener('livewire:init', function () {
+        function handleSuccess(position) {
+            const { latitude, longitude } = position.coords;
+            Livewire.dispatch('update-location', { latitude: latitude, longitude: longitude });
+            console.log('event dispatched');
+        }
+
+        function handleError(error) {
+            console.error('Error getting location:', error);
+        }
+            
+
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(handleSuccess, handleError, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            });
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
+    });
+</script>
+

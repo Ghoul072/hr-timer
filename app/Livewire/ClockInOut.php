@@ -3,9 +3,9 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On; 
 use App\Models\TimeEntry;
 use App\Models\BreakEntry;
-
 use Carbon\Carbon;
 
 class ClockInOut extends Component
@@ -16,6 +16,7 @@ class ClockInOut extends Component
     public $onBreak = false;
     public $totalWorkTime = "00:00:00";
     public $totalBreakTime = "00:00:00";
+    public $location;
 
     public function mount() {
         $this->timeEntry = TimeEntry::where('user_id', auth()->id())
@@ -38,7 +39,7 @@ class ClockInOut extends Component
         $this->timeEntry = TimeEntry::create([
             'user_id' => auth()->id(),
             'start_time' => now(),
-            'start_location' => $this->getLocation(),
+            'start_location' => $this->location,
         ]);
         $this->clockedIn = true;
     }
@@ -48,13 +49,13 @@ class ClockInOut extends Component
         if ($this->onBreak) {
             $this->breakEntry->update([
                 'end_time' => now(),
-                'end_location' => $this->getLocation(),
+                'end_location' => $this->location,
             ]);
             $this->onBreak = false;
         }
         $this->timeEntry->update([
             'end_time' => now(),
-            'end_location' => $this->getLocation(),
+            'end_location' => $this->location,
         ]);
         $this->clockedIn = false;
         $this->timeEntry = null;
@@ -65,7 +66,7 @@ class ClockInOut extends Component
         $this->breakEntry = BreakEntry::create([
             'time_entry_id' => $this->timeEntry->id,
             'start_time' => now(),
-            'start_location' => $this->getLocation(),
+            'start_location' => $this->location,
         ]);
         $this->onBreak = true;
     }
@@ -74,7 +75,7 @@ class ClockInOut extends Component
         if (!$this->onBreak) return;
         $this->breakEntry->update([
             'end_time' => now(),
-            'end_location' => $this->getLocation(),
+            'end_location' => $this->location,
         ]);
         $this->onBreak = false;
         $this->breakEntry = null;
@@ -112,13 +113,12 @@ class ClockInOut extends Component
         
     }
 
-    public function getLocation()
-    {
-        // ToDo: Implement this method
-        return json_encode([
-            "latitude" => 4.1753,
-            "longitude" => 73.5091,
-        ]);
+    #[On('update-location')] 
+    public function updateLocation($latitude, $longitude) {
+        $this->location = [
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+        ];
     }
 
     public function poll() {
