@@ -79,6 +79,7 @@ class ClockInOut extends Component
         ]);
         $this->onBreak = false;
         $this->breakEntry = null;
+        $this->totalBreakTime = "00:00:00";
     }
 
     public function updateTotalTime() {
@@ -104,13 +105,19 @@ class ClockInOut extends Component
         $breakSeconds = str_pad($totalBreakSeconds % 60, 2, '0', STR_PAD_LEFT);
         
         $this->totalWorkTime = "{$hours}:{$minutes}:{$seconds}";
-        $this->totalBreakTime = "{$breakHours}:{$breakMinutes}:{$breakSeconds}";
-        
     }
 
-    public function updateTotalBreakTime() {
-        if (!$this->timeEntry || !$this->onBreak) return;
+    public function updateCurrentBreakTime() {
+        if (!$this->breakEntry) return;
+        $startTime = Carbon::parse($this->breakEntry->start_time);
+        $currentTime = Carbon::now();
+        $totalSeconds = $startTime->diffInSeconds($currentTime);
+
+        $hours = str_pad(floor($totalSeconds / 3600), 2, '0', STR_PAD_LEFT);
+        $minutes = str_pad(floor(($totalSeconds % 3600) / 60), 2, '0', STR_PAD_LEFT);
+        $seconds = str_pad($totalSeconds % 60, 2, '0', STR_PAD_LEFT);
         
+        $this->totalBreakTime = "{$hours}:{$minutes}:{$seconds}";
     }
 
     #[On('update-location')] 
@@ -123,6 +130,7 @@ class ClockInOut extends Component
 
     public function poll() {
         $this->updateTotalTime();
+        $this->updateCurrentBreakTime();
     }
 
     public function render()
