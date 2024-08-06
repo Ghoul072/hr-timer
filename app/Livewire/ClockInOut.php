@@ -59,6 +59,8 @@ class ClockInOut extends Component
         ]);
         $this->clockedIn = false;
         $this->timeEntry = null;
+        $this->totalWorkTime = "00:00:00";
+        $this->totalBreakTime = "00:00:00";
     }
 
     public function startBreak() {
